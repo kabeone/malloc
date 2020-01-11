@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/malloc.dir/malloc.c.o"
+  "CMakeFiles/malloc.dir/src/malloc_function.c.o"
   "malloc"
   "malloc.pdb"
 )

@@ -78,10 +78,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/kabeone/kabeone/malloc/header/malloc_function.h">
+			<Option target="malloc"/>
+		</Unit>
 		<Unit filename="/Users/kabeone/kabeone/malloc/header/struct_malloc.h">
 			<Option target="malloc"/>
 		</Unit>
 		<Unit filename="/Users/kabeone/kabeone/malloc/malloc.c">
+			<Option target="malloc"/>
+		</Unit>
+		<Unit filename="/Users/kabeone/kabeone/malloc/src/malloc_function.c">
 			<Option target="malloc"/>
 		</Unit>
 		<Unit filename="/Users/kabeone/kabeone/malloc/CMakeLists.txt">

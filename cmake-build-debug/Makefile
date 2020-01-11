@@ -150,6 +150,33 @@ malloc.c.s:
 	$(MAKE) -f CMakeFiles/malloc.dir/build.make CMakeFiles/malloc.dir/malloc.c.s
 .PHONY : malloc.c.s
 
+src/malloc_function.o: src/malloc_function.c.o
+
+.PHONY : src/malloc_function.o
+
+# target to build an object file
+src/malloc_function.c.o:
+	$(MAKE) -f CMakeFiles/malloc.dir/build.make CMakeFiles/malloc.dir/src/malloc_function.c.o
+.PHONY : src/malloc_function.c.o
+
+src/malloc_function.i: src/malloc_function.c.i
+
+.PHONY : src/malloc_function.i
+
+# target to preprocess a source file
+src/malloc_function.c.i:
+	$(MAKE) -f CMakeFiles/malloc.dir/build.make CMakeFiles/malloc.dir/src/malloc_function.c.i
+.PHONY : src/malloc_function.c.i
+
+src/malloc_function.s: src/malloc_function.c.s
+
+.PHONY : src/malloc_function.s
+
+# target to generate assembly for a file
+src/malloc_function.c.s:
+	$(MAKE) -f CMakeFiles/malloc.dir/build.make CMakeFiles/malloc.dir/src/malloc_function.c.s
+.PHONY : src/malloc_function.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -162,6 +189,9 @@ help:
 	@echo "... malloc.o"
 	@echo "... malloc.i"
 	@echo "... malloc.s"
+	@echo "... src/malloc_function.o"
+	@echo "... src/malloc_function.i"
+	@echo "... src/malloc_function.s"
 .PHONY : help
 
 

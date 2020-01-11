@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
   "/Users/kabeone/kabeone/malloc/malloc.c" "/Users/kabeone/kabeone/malloc/cmake-build-debug/CMakeFiles/malloc.dir/malloc.c.o"
+  "/Users/kabeone/kabeone/malloc/src/malloc_function.c" "/Users/kabeone/kabeone/malloc/cmake-build-debug/CMakeFiles/malloc.dir/src/malloc_function.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 

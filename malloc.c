@@ -1,27 +1,20 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/mman.h>
+#include "header/malloc_function.h"
+#include "header/struct_malloc.h"
 
-#define page_size getpagesize()
 
-void *malloc(size_t size)
-{
-    void *ptr;
 
-    if ( (ptr = mmap(NULL, size, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *) -1)
-        return NULL;
-    return ptr;
-}
-
-void free(void *ptr, int size)
+void my_free(void *ptr, int size)
 {
     if (ptr == NULL)
         return;
-    if (munmap(ptr, size) == -1)
+    if (munmap(ptr - sizeof(block_stat), size) == -1)
         printf("Error : free : memory at address `%p` was not allocated\n", ptr);
 }
 
-void *realloc(void *ptr, size_t size)
+void *my_realloc(void *ptr, size_t size)
 {
     return NULL;
 }
@@ -29,15 +22,20 @@ void *realloc(void *ptr, size_t size)
 int main()
 {
     int *a;
-    char *str = malloc(100);
+    char *str = my_malloc(100);
+    block_stat *block = (block_stat *) (str - sizeof(block_stat));
 
-    printf("%p\n", str);
+
+    printf("%zu\n", sizeof(block_stat));
+    printf("size 1st block %d\n", block->size);
+    block += block->size + sizeof(block_stat);
+    printf("empty space after block %d\n", block->size);
 
     for (int i = 0; i < 100; i++)
         str[i] = 'A';
     write(1, str, 100);
     write(1, "\n", 1);
-    free(str, 100);
+    my_free(str, 4096);
 
     return 0;
 }
