@@ -16,13 +16,20 @@ static void *init_space(size_t size, void *ptr)
 {
     block_stat *block = ptr;
     int empty_space = block->size;
+    type_zone type = small;
+
+    if (size <= TINY)
+        type = tiny;
 
     block->state = mem_allocated;
     block->size = size;
+    block->type = type;
 
     block = ptr + size + sizeof(block_stat);
+
     block->state = mem_free;
     block->size = empty_space - size;
+    block->type = type;
 
     return ptr + sizeof(block_stat);
 }
@@ -64,15 +71,19 @@ static void *alloc(size_t size)
     size_t asked_size = size;
     block_stat *block;
     unsigned long nb_page = 0;
+    type_zone type = 0;
 
     if (size > SMALL) {
         while (page_size * nb_page < size + sizeof(block_stat))
             nb_page++;
         size = nb_page * page_size;
+        type = large;
     } else if (size <= TINY) {
         size = tiny_zone;
+        type = tiny;
     } else if (size <= SMALL) {
         size = small_zone;
+        type = small;
     }
 
     if ( (ptr = mmap(NULL, size, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *) -1)
@@ -80,10 +91,12 @@ static void *alloc(size_t size)
     block = ptr;
     block->state = mem_allocated;
     block->size = asked_size;
+    block->type = type;
     if (asked_size <= SMALL) {
         block = ptr + asked_size + sizeof(block_stat);
         block->state = mem_free;
         block->size = size - (2 * sizeof(block_stat) + asked_size);
+        block->type = type;
     }
     return ptr += sizeof(block_stat);
 }

@@ -81,6 +81,9 @@
 		<Unit filename="/Users/kabeone/kabeone/malloc/header/malloc_function.h">
 			<Option target="malloc"/>
 		</Unit>
+		<Unit filename="/Users/kabeone/kabeone/malloc/header/pages.h">
+			<Option target="malloc"/>
+		</Unit>
 		<Unit filename="/Users/kabeone/kabeone/malloc/header/struct_malloc.h">
 			<Option target="malloc"/>
 		</Unit>
@@ -88,6 +91,9 @@
 			<Option target="malloc"/>
 		</Unit>
 		<Unit filename="/Users/kabeone/kabeone/malloc/src/malloc_function.c">
+			<Option target="malloc"/>
+		</Unit>
+		<Unit filename="/Users/kabeone/kabeone/malloc/src/pages.c">
 			<Option target="malloc"/>
 		</Unit>
 		<Unit filename="/Users/kabeone/kabeone/malloc/CMakeLists.txt">

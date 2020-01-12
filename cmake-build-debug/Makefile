@@ -177,6 +177,33 @@ src/malloc_function.c.s:
 	$(MAKE) -f CMakeFiles/malloc.dir/build.make CMakeFiles/malloc.dir/src/malloc_function.c.s
 .PHONY : src/malloc_function.c.s
 
+src/pages.o: src/pages.c.o
+
+.PHONY : src/pages.o
+
+# target to build an object file
+src/pages.c.o:
+	$(MAKE) -f CMakeFiles/malloc.dir/build.make CMakeFiles/malloc.dir/src/pages.c.o
+.PHONY : src/pages.c.o
+
+src/pages.i: src/pages.c.i
+
+.PHONY : src/pages.i
+
+# target to preprocess a source file
+src/pages.c.i:
+	$(MAKE) -f CMakeFiles/malloc.dir/build.make CMakeFiles/malloc.dir/src/pages.c.i
+.PHONY : src/pages.c.i
+
+src/pages.s: src/pages.c.s
+
+.PHONY : src/pages.s
+
+# target to generate assembly for a file
+src/pages.c.s:
+	$(MAKE) -f CMakeFiles/malloc.dir/build.make CMakeFiles/malloc.dir/src/pages.c.s
+.PHONY : src/pages.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -192,6 +219,9 @@ help:
 	@echo "... src/malloc_function.o"
 	@echo "... src/malloc_function.i"
 	@echo "... src/malloc_function.s"
+	@echo "... src/pages.o"
+	@echo "... src/pages.i"
+	@echo "... src/pages.s"
 .PHONY : help
 
 

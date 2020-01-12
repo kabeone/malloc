@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_C
   "/Users/kabeone/kabeone/malloc/malloc.c" "/Users/kabeone/kabeone/malloc/cmake-build-debug/CMakeFiles/malloc.dir/malloc.c.o"
   "/Users/kabeone/kabeone/malloc/src/malloc_function.c" "/Users/kabeone/kabeone/malloc/cmake-build-debug/CMakeFiles/malloc.dir/src/malloc_function.c.o"
+  "/Users/kabeone/kabeone/malloc/src/pages.c" "/Users/kabeone/kabeone/malloc/cmake-build-debug/CMakeFiles/malloc.dir/src/pages.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 
