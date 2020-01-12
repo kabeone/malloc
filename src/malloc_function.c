@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/mman.h>
@@ -24,13 +25,13 @@ void *alloc(size_t size)
         ;
     }
 
-    if ( (ptr = mmap(NULL, size, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *) -1)
+    if ( (ptr = mmap(NULL, nb_page * page_size, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *) -1)
         return NULL;
-    block = (block_stat *)ptr;
+    block = ptr;
     block->state = allocated;
     block->size = size;
     if (size <= SMALL) {
-        block = block + sizeof(block_stat) + size;
+        block = ptr + size + sizeof(block_stat);
         block->state = free;
         block->size = page_size - 2 * sizeof(block_stat) - size;
     }
@@ -45,17 +46,16 @@ void *my_malloc(size_t size)
         if (*page_array) {}
         else {
             ptr = alloc(size);
-            *page_array = ptr;
+            *page_array = ptr - sizeof(block_stat);
         }
     }
     else if (size <= SMALL)
         if (page_array[1]) {}
         else {
             ptr = alloc(size);
-            page_array[1] = ptr;
+            page_array[1] = ptr - sizeof(block_stat);
         }
     else
         ptr = alloc(size);
-
     return ptr;
 }

@@ -22,18 +22,23 @@ void *my_realloc(void *ptr, size_t size)
 int main()
 {
     int *a;
-    char *str = my_malloc(100);
-    block_stat *block = (block_stat *) (str - sizeof(block_stat));
+    char *str = my_malloc(2000);
+    block_stat *block;
 
+    printf("ptr -> %p\n", str);
+    if (str == NULL) {
+        return 0;
+    }
+    block = (block_stat *) (str - sizeof(block_stat));
 
-    printf("%zu\n", sizeof(block_stat));
-    printf("size 1st block %d\n", block->size);
-    block += block->size + sizeof(block_stat);
+    printf("\n");
+    printf("size 1st block : %d\n", block->size);
+    block = (block_stat *) ((char *) block + block->size + sizeof(block_stat));
     printf("empty space after block %d\n", block->size);
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 20; i++)
         str[i] = 'A';
-    write(1, str, 100);
+    write(1, str, 1000);
     write(1, "\n", 1);
     my_free(str, 4096);
 
