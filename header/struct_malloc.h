@@ -4,12 +4,12 @@
 typedef char memory_state;
 
 enum {
-    free = 0,
-    allocated = 1,
+    mem_free = 0,
+    mem_allocated = 1,
 };
 typedef struct {
     memory_state state;
-    int size;
+    size_t size;
 } block_stat;
 
 #endif //MALLOC_STRUCT_MALLOC_H
