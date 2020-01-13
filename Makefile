@@ -1,7 +1,8 @@
 CC   = gcc -Wall -Wextra -std=c11
 NAME = malloc
 SRC  = malloc.c \
-	   src/malloc_function.c
+	   src/malloc_function.c \
+	   src/pages.c
 OBJ  = $(SRC:.c=.o)
 
 RM   = rm -rf

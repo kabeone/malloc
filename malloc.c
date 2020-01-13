@@ -24,8 +24,7 @@ int main(int argc, char ** argv)
 {
     int size;
     char *str;
-    char *str2;
-    block_stat *block;
+    //block_stat *block;
 
     if (argc != 2) {
         printf("Error : wrong nb of arguments\n");
@@ -33,14 +32,8 @@ int main(int argc, char ** argv)
     }
     size = atoi(argv[1]);
 
-    str = my_malloc(size);
-    str2 = my_malloc(size);
-
-    block = (block_stat *) (str - sizeof(block_stat));
-
-    printf("-> %zu\n", block->size);
-    block = (block_stat *) (str + block->size);
-    printf("-> %zu\n", block->size);
+    for (int i = 0; i < 2050; i++)
+        str = my_malloc(size);
 
     return 0;
 }

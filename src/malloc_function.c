@@ -3,14 +3,13 @@
 #include <stdio.h>
 #include <sys/mman.h>
 #include "../header/struct_malloc.h"
+#include "../header/pages.h"
 
 #define page_size getpagesize()
 #define TINY 256
 #define SMALL 2048
 #define tiny_zone page_size * (TINY * 100 / page_size + 1)
 #define small_zone page_size * (SMALL * 100 / page_size + 1)
-
-void *page_array[2] = { NULL, NULL };
 
 static void *init_space(size_t size, void *ptr)
 {
@@ -101,27 +100,91 @@ static void *alloc(size_t size)
     return ptr += sizeof(block_stat);
 }
 
+static void *set_pages_ref(int *_nb_pages, void *page, size_t size, void **ptr)
+{
+    for (unsigned long i = 0; i < *_nb_pages * page_size / sizeof(void *); i++) {
+        if ( ((char **) page)[i] != NULL)
+            if ( (*ptr = check_space(size, ((char **) page)[i])) != NULL)
+                return page;
+    }
+
+    for (unsigned long i = 0; i < *_nb_pages * page_size / sizeof(void *); i++) {
+        if ( ((char **) page)[i] == NULL) {
+            *ptr = alloc(size);
+            ((char **) page)[i] = *ptr - sizeof(block_stat);
+            return page;
+        }
+    }
+
+    page = realloc_page_ref(nb_pages[2], page);
+
+    *ptr = alloc(size);
+    ((char **) page)[nb_pages[2] * page_size / sizeof(void *)] = *ptr - sizeof(block_stat);
+
+    *_nb_pages *= 2;
+
+    return page;
+}
+
+static void *set_pages_ref_large(void *page, void *size_alloc)
+{
+    if (size_alloc == NULL)
+        return page;
+
+    for (unsigned long i = 0; i < page_size / sizeof(void *) * nb_pages[2]; i++) {
+        if (((char **) page)[i] == NULL) {
+            ((char **) page)[i] = size_alloc;
+            return page;
+        }
+    }
+
+    page = realloc_page_ref(nb_pages[2], page);
+
+    ((char **) page)[nb_pages[2] * page_size / sizeof(void *)] = size_alloc;
+    nb_pages[2] *= 2;
+
+    return page;
+}
+
 void *my_malloc(size_t size)
 {
     void *ptr = NULL;
+    char **page;
 
     if (size == 0)
         return NULL;
+
     if (size <= TINY) {
         if (page_array[0]) {
-            check_space(size, page_array[0]);
+            page = set_pages_ref(&nb_pages[0], page_array[0], size, &ptr);
+            //if ( check_space(size, page_array[0]) == NULL )
+            //    printf("not enough space\n");
         } else {
-            ptr = alloc(size);
-            *page_array = ptr - sizeof(block_stat);
+            page = page_ref();
+            page[0] = ptr = alloc(size);
+            page_array[0] = page;
+            nb_pages[0]++;
         }
+
     } else if (size <= SMALL)
         if (page_array[1]) {
-            check_space(size, page_array[1]) ;
+            if ( check_space(size, page_array[1]) == NULL )
+                printf("not enough space\n");
         } else {
-            ptr = alloc(size);
-            page_array[1] = ptr - sizeof(block_stat);
+            page = page_ref();
+            page[0] = ptr = alloc(size);
+            page_array[1] = page;
+            nb_pages[1]++;
         }
-    else
+
+    else {
+        if (page_array[2] == NULL) {
+            page = page_ref();
+            page_array[2] = page;
+            nb_pages[2]++;
+        }
         ptr = alloc(size);
+        page_array[2] = set_pages_ref_large(page_array[2], ptr);
+    }
     return ptr;
 }
