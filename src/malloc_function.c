@@ -87,6 +87,7 @@ static void *alloc(size_t size)
 
     if ( (ptr = mmap(NULL, size, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *) -1)
         return NULL;
+
     block = ptr;
     block->state = mem_allocated;
     block->size = asked_size;
@@ -97,7 +98,8 @@ static void *alloc(size_t size)
         block->size = size - (2 * sizeof(block_stat) + asked_size);
         block->type = type;
     }
-    return ptr += sizeof(block_stat);
+
+    return ptr + sizeof(block_stat);
 }
 
 static void *set_pages_ref(int *_nb_pages, void *page, size_t size, void **ptr)
@@ -116,7 +118,11 @@ static void *set_pages_ref(int *_nb_pages, void *page, size_t size, void **ptr)
         }
     }
 
-    page = realloc_page_ref(nb_pages[2], page);
+    dprintf(2, "1");
+    dprintf(2, "page_nb -> %d addr %p\n", *_nb_pages, page);
+    page = realloc_page_ref(*nb_pages, page);
+
+    dprintf(2, "2");
 
     *ptr = alloc(size);
     ((char **) page)[nb_pages[2] * page_size / sizeof(void *)] = *ptr - sizeof(block_stat);
@@ -156,23 +162,22 @@ void *my_malloc(size_t size)
 
     if (size <= TINY) {
         if (page_array[0]) {
-            page = set_pages_ref(&nb_pages[0], page_array[0], size, &ptr);
-            //if ( check_space(size, page_array[0]) == NULL )
-            //    printf("not enough space\n");
+            page_array[0] = set_pages_ref(&nb_pages[0], page_array[0], size, &ptr);
         } else {
             page = page_ref();
             page[0] = ptr = alloc(size);
+            page[0] -= sizeof(block_stat);
             page_array[0] = page;
             nb_pages[0]++;
         }
 
     } else if (size <= SMALL)
         if (page_array[1]) {
-            if ( check_space(size, page_array[1]) == NULL )
-                printf("not enough space\n");
+            page_array[1] = set_pages_ref(&nb_pages[1], page_array[1], size, &ptr);
         } else {
             page = page_ref();
-            page[0] = ptr = alloc(size);
+            page[1] = ptr = alloc(size);
+            page[1] -= sizeof(block_stat);
             page_array[1] = page;
             nb_pages[1]++;
         }
@@ -184,7 +189,7 @@ void *my_malloc(size_t size)
             nb_pages[2]++;
         }
         ptr = alloc(size);
-        page_array[2] = set_pages_ref_large(page_array[2], ptr);
+        page_array[2] = set_pages_ref_large(page_array[2], ptr - sizeof(block_stat));
     }
     return ptr;
 }

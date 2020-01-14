@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,20 +21,32 @@ void *my_realloc(void *ptr, size_t size)
     return NULL;
 }
 
+void write_nb(char *str, int nb){
+    write(1, str, nb);
+}
+
+
 int main(int argc, char ** argv)
 {
-    int size;
     char *str;
-    //block_stat *block;
+    char *str2;
+    char *str3;
+    char *str4;
+    char *str5;
+    for (int i = 0; i < 1000000; i++) {
+        str3 = my_malloc(15);
+        str = my_malloc(100);
+        str2 = my_malloc(255);
 
-    if (argc != 2) {
-        printf("Error : wrong nb of arguments\n");
-        return 84;
+
+        //str4 = my_malloc(2000);
+        // à corriger
+
+        //str5 = my_malloc(4000);
+        // semble okay
+
+        //write(1, "#", 1);
     }
-    size = atoi(argv[1]);
-
-    for (int i = 0; i < 2050; i++)
-        str = my_malloc(size);
 
     return 0;
 }
