@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/mman.h>
+#include <stdio.h>
 #include "header/malloc_function.h"
 #include "header/struct_malloc.h"
 
@@ -35,8 +36,8 @@ int main(int argc, char ** argv)
     char *str5;
     for (int i = 0; i < 1000000; i++) {
         str3 = my_malloc(15);
-        str = my_malloc(100);
-        str2 = my_malloc(255);
+        //str = my_malloc(100);
+        //str2 = my_malloc(255);
 
 
         //str4 = my_malloc(2000);
@@ -45,7 +46,7 @@ int main(int argc, char ** argv)
         //str5 = my_malloc(4000);
         // semble okay
 
-        //write(1, "#", 1);
+        printf("%d\n", i);
     }
 
     return 0;

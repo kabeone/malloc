@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #include <unistd.h>
 #include <sys/mman.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -38,7 +39,9 @@ void *realloc_page_ref(int nb_pages, void *ptr)
         exit(84);
     }
     memcpy(new_ptr, ptr, nb_pages * page_size);
+
     munmap(ptr, nb_pages * page_size);
+
     for (int i = (nb_pages * page_size); i < nb_pages * page_size * 2; i++)
         ((char *)ptr)[i] = 0;
 

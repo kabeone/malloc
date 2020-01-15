@@ -118,11 +118,8 @@ static void *set_pages_ref(int *_nb_pages, void *page, size_t size, void **ptr)
         }
     }
 
-    dprintf(2, "1");
-    dprintf(2, "page_nb -> %d addr %p\n", *_nb_pages, page);
-    page = realloc_page_ref(*nb_pages, page);
-
-    dprintf(2, "2");
+    dprintf(2, "lala ta grand mere malloc\n");
+    page = realloc_page_ref(*_nb_pages, page);
 
     *ptr = alloc(size);
     ((char **) page)[nb_pages[2] * page_size / sizeof(void *)] = *ptr - sizeof(block_stat);
