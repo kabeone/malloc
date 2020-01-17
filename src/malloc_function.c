@@ -27,7 +27,7 @@ static void *init_space(size_t size, void *ptr)
     block = ptr + size + sizeof(block_stat);
 
     block->state = mem_free;
-    block->size = empty_space - size;
+    block->size = empty_space - ( size + sizeof(block_stat));
     block->type = type;
 
     return ptr + sizeof(block_stat);
@@ -111,6 +111,7 @@ static void *set_pages_ref(int *_nb_pages, void *page, size_t size, void **ptr)
     }
 
     for (unsigned long i = 0; i < *_nb_pages * page_size / sizeof(void *); i++) {
+
         if ( ((char **) page)[i] == NULL) {
             *ptr = alloc(size);
             ((char **) page)[i] = *ptr - sizeof(block_stat);
@@ -118,7 +119,6 @@ static void *set_pages_ref(int *_nb_pages, void *page, size_t size, void **ptr)
         }
     }
 
-    dprintf(2, "lala ta grand mere malloc\n");
     page = realloc_page_ref(*_nb_pages, page);
 
     *ptr = alloc(size);

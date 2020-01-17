@@ -1,25 +1,19 @@
-CC   = gcc -Wall -Wextra -std=c11
-NAME = malloc
-SRC  = malloc.c \
-	   src/malloc_function.c \
-	   src/pages.c
+NAME = memlib.a
+SRC  = src/malloc_function.c \
+       src/pages.c
 OBJ  = $(SRC:.c=.o)
 
 RM   = rm -rf
 
 all:		$(NAME)
 
-$(NAME):    	$(OBJ)
-			$(CC) $(OBJ) -o $(NAME)
+$(NAME):		$(OBJ)
+		ar crs $(NAME) $(OBJ)
 
 clean:
-			$(RM) $(OBJ)
+		$(RM) $(OBJ)
 
 fclean:		clean
-			$(RM) $(NAME) $(NAME).dSYM
+		$(RM) $(NAME)
 
-re:			fclean all
-
-debug:		fclean
-			rm -rf $(NAME).dSYM
-			$(CC) $(SRC) -g -o $(NAME)
+re:		fclean all
